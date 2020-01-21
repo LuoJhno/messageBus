@@ -1,0 +1,145 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "http://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
+        classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.4"
+        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
+    }
+}
+
+
+plugins {
+    id "java"
+    id "maven"
+    id "idea"
+    id "jacoco"
+    id "net.ltgt.apt-eclipse" version "0.21"
+    id "net.ltgt.apt-idea" version "0.21"
+    id "net.ltgt.apt" version "0.21"
+    id "org.sonarqube" version "2.7"
+    id 'maven-publish' //添加这个plugin
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+assert System.properties['java.specification.version'] == '1.8'
+
+eclipse {
+    sourceSets {
+        main {
+            java {
+                srcDirs += ["build/generated/source/apt/main"]
+            }
+        }
+    }
+}
+
+group = 'com.message'
+version = "${frame_version}"
+description = ''
+
+jar {
+    baseName = 'messageBus'
+    version = "${frame_version}"
+}
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn test
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+configurations {
+    providedRuntime
+    implementation.exclude module: "spring-boot-starter-tomcat"
+    all*.exclude module: 'spring-boot-starter-logging'
+}
+
+dependencies {
+    implementation platform("io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}")
+    implementation platform("org.springframework.statemachine:spring-statemachine-bom:${springStatemachineVersion}")
+
+    implementation group: "io.github.jhipster", name: "jhipster-framework"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation "com.fasterxml.jackson.core:jackson-annotations"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation "javax.cache:cache-api"
+    implementation "org.apache.commons:commons-lang3"
+    implementation "commons-io:commons-io"
+
+    implementation "commons-beanutils:commons-beanutils:1.9.3"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-amqp"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+
+    implementation "org.zalando:problem-spring-web"
+    implementation "org.springframework.boot:spring-boot-starter-cloud-connectors"
+    implementation "org.springframework.security:spring-security-config"
+    implementation "org.springframework.security:spring-security-data"
+    implementation "org.springframework.security:spring-security-web"
+    implementation "org.springframework.security:spring-security-messaging"
+    implementation "io.jsonwebtoken:jjwt-api"
+
+    implementation("io.springfox:springfox-swagger2")
+    implementation "io.springfox:springfox-bean-validators"
+
+    implementation "javax.interceptor:javax.interceptor-api:1.2.2"
+
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
+
+    testImplementation "com.jayway.jsonpath:json-path"
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude module: "junit"
+        exclude group: "com.vaadin.external.google", module: "android-json"
+    }
+    testImplementation "org.springframework.security:spring-security-test"
+    testImplementation "org.springframework.boot:spring-boot-test"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.assertj:assertj-core"
+    testImplementation "junit:junit"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.hamcrest:hamcrest-library"
+    testImplementation "org.springframework.cloud:spring-cloud-stream-test-support"
+
+    testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
+    testCompileOnly "org.projectlombok:lombok:${lombok_version}"
+}
+
+repositories {
+    mavenLocal()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+    mavenCentral()
+    maven { url "http://repo.spring.io/plugins-release" }
+    maven { url "https://plugins.gradle.org/m2/" }
+    jcenter()
+}
+
+task eclilpse(dependsOn: 'eclipseJdt') {
+}
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+
