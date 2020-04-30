@@ -3,7 +3,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -128,9 +128,9 @@ dependencies {
 
 repositories {
     mavenLocal()
-    maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+    maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
     mavenCentral()
-    maven { url "http://repo.spring.io/plugins-release" }
+    maven { url "https://repo.spring.io/plugins-release" }
     maven { url "https://plugins.gradle.org/m2/" }
     jcenter()
 }
